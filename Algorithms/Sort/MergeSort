@@ -1,1 +1,80 @@
 #include <iostream>
+using namespace std;
+
+void merge(int* arr, int from, int m, int to)
+{
+	int i, j, k;
+	int n1 = m - from + 1;
+	int n2 = to - m;
+
+	int* L1 = new int[n1];
+	int* L2 = new int[n2];
+
+	for (int i = 0; i < n1; i++)
+	{
+		L1[i] = arr[i + from];
+	}
+	for (int i = 0; i < n2; i++)
+	{
+		L2[i] = arr[i + m + 1];
+	}
+
+	i = 0;
+	j = 0; 
+	k = from;
+	while (i < n1 && j < n2)
+	{
+		if (L1[i] < L2[j])
+		{
+			arr[k++] = L1[i++];
+		}
+		else
+		{
+			arr[k++] = L2[j++];
+		}
+	}
+
+	while (i < n1)
+	{
+		arr[k++] = L1[i++];
+	}
+	while (j < n2)
+	{
+		arr[k++] = L2[j++];
+	}
+}
+
+void mergeSort(int* arr, int from, int to)
+{
+	if (from < to)
+	{
+		int m = from + (to - from) / 2;
+
+		mergeSort(arr, from, m);
+		mergeSort(arr, m + 1, to);
+
+		merge(arr, from, m, to);
+	}
+}
+
+int main()
+{
+	int* arr = new int[5];
+	
+	arr[0] = 4;
+	arr[1] = -2;
+	arr[2] = 1;
+	arr[3] = 45;
+	arr[4] = 12;
+
+	mergeSort(arr, 0, 4);
+
+	for (int i = 0; i < 5; i++)
+	{
+		cout << arr[i] << endl;
+	}
+
+	int bra;
+	cin >> bra;
+	return 0;
+}
