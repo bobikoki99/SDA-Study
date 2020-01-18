@@ -1,0 +1,152 @@
+#include <iostream>
+using namespace std;
+
+struct Node
+{
+	int data; 
+	Node* next;
+
+	Node(int data)
+	{
+		this->data = data;
+		next = NULL;
+	}
+};
+
+class List
+{
+private:
+	Node* head;
+	Node* tail;
+public:
+
+	List()
+	{
+		head = NULL;
+		tail = NULL;
+	}
+
+	void InsertAtEnd(int data)
+	{
+		Node* temp = new Node(data);
+
+		if (head == NULL)
+		{
+			head = temp;
+			tail = temp;
+		}
+		else
+		{
+			tail->next = temp;
+			tail = temp;
+		}
+	}
+
+	void InsertAtStart(int data)
+	{
+		Node* temp = new Node(data);
+		
+		if (head == NULL)
+		{
+			head = temp;
+			tail = temp;
+		}
+		else
+		{
+			temp->next = head;
+			head = temp;
+		}
+	}
+
+	void print()
+	{
+		Node* temp = head;
+		while (temp != NULL)
+		{
+			cout << temp->data << endl;
+			temp = temp->next;
+		}
+	}
+
+	void insert_position(int pos, int data)
+	{
+		Node* pre;
+		Node* cur = head; 
+		Node* newNode = new Node(data);
+
+		for (int i = 1; i < pos; i++)
+		{
+			pre = cur;
+			cur = cur->next;
+		}
+
+		pre->next = newNode;
+		newNode->next = cur;
+	}
+
+	void delete_last()
+	{
+		Node* prev = new Node(0);
+		Node* cur = head;
+
+		while (cur->next != NULL)
+		{
+			prev = cur;
+			cur = cur->next;
+		}
+
+		tail = prev;
+		prev->next = NULL;
+		delete cur;
+	}
+
+	void delete_first()
+	{
+		Node* temp = head;
+
+		if (head != NULL)
+		{
+			head = head->next;
+			delete temp;
+		}
+	}
+
+	void delete_position(int pos)
+	{
+		Node* prev = new Node(0);
+		Node* cur = head;
+		
+		for (int i = 1; i < pos; i++)
+		{
+			prev = cur;
+			cur = cur->next;
+		}
+
+		prev->next = cur->next;
+		delete cur;
+	}
+};
+
+
+int main()
+{
+
+	List bako;
+
+	bako.InsertAtEnd(5);
+	bako.InsertAtEnd(4);
+	bako.InsertAtEnd(3);
+	bako.InsertAtEnd(2);
+	bako.InsertAtEnd(1);
+	bako.InsertAtEnd(0);
+
+	bako.print();
+
+	bako.delete_position(3);
+
+	bako.print();
+
+	int bra;
+	cin >> bra;
+	return 0;
+}
