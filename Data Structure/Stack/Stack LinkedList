@@ -1,0 +1,102 @@
+#include <iostream>
+using namespace std;
+
+struct Node
+{
+	int data;
+	Node* prev;
+
+	Node()
+	{
+		prev = NULL;
+	}
+	Node(int data)
+	{
+		this->data = data;
+		prev = NULL;
+	}
+};
+
+class Stack
+{
+private:
+	Node* front;
+
+public:
+	Stack()
+	{
+		front = NULL;
+	}
+
+	bool IsEmpty()
+	{
+		if (front == NULL)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	void push(int data)
+	{
+		Node* temp = new Node(data);
+		
+		if (front == NULL)
+		{
+			front = temp;
+		}
+		else
+		{
+			temp->prev = front;
+			front = temp;
+		}
+	}
+
+	void pop()
+	{
+
+		if (IsEmpty())
+		{	
+			cout << "No Elements " << endl;
+		}
+		else
+		{
+			front = front->prev;
+		}
+	}
+
+	void print()
+	{
+		Node* temp = front;
+
+		while (temp != NULL)
+		{
+			cout << temp->data << endl;
+			temp = temp->prev;
+		}
+	}
+};
+
+int main()
+{
+	Stack bako;
+
+	bako.push(8);
+	bako.push(6);
+	bako.push(1);
+	bako.push(9);
+	bako.push(3);
+	bako.push(5);
+	bako.push(1);
+
+	bako.print();
+
+	bako.pop();
+	bako.pop();
+
+	bako.print();
+
+	int bra;
+	cin >> bra;
+	return 0;
+}
