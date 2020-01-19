@@ -1,0 +1,199 @@
+#include <iostream>
+using namespace std;
+
+struct Node
+{
+	Node* left = nullptr;
+	Node* right = nullptr;
+	int data;
+
+	Node() = default;
+
+	Node(int data)
+	{
+		this->data = data;
+	}
+
+	~Node()
+	{
+		delete[] left;
+		delete[] right;
+	}
+};
+
+class BST
+{
+private:
+	
+	Node* root = nullptr;
+
+	bool _exists(int value, Node* curr)
+	{
+		if (curr)
+		{
+			if (curr->data == value)
+				return true;
+			else if (curr->data < value)
+				return _exists(value, curr->right);
+			else
+				return _exists(value, curr->left);
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	Node* _insert(int value, Node* curr)
+	{
+		if (!curr)
+		{
+			return new Node(value);
+		}
+
+		if (curr->data > value)
+		{
+			curr->left = _insert(value, curr->left);
+		}
+		else if (curr->data < value)
+		{
+			curr->right = _insert(value, curr->right);
+		}
+
+		return curr;
+	}
+
+	void _inorder(Node* curr)
+	{
+		if (curr)
+		{
+			_inorder(curr->left);
+			cout << curr->data << " ";
+			_inorder(curr->right);
+		}
+	}
+
+	void _preorder(Node* curr)
+	{
+		if (curr)
+		{
+			cout << curr->data << " ";
+			_preorder(curr->left);
+			_preorder(curr->right);
+		}
+	}
+
+	void _print_odd(Node* curr, int count)
+	{
+		if (curr)
+		{
+			if (count % 2 == 1)
+			{
+				cout << curr->data << " ";
+			}
+
+			count++;
+
+			_print_odd(curr->left, count);
+			_print_odd(curr->right, count);
+		}
+	}
+
+	Node* _remove(int value, Node* curr)
+	{
+		if (!curr)
+		{
+			return nullptr;
+		} 
+
+		if (curr->data > value)
+		{
+			curr->left = _remove(value, curr->left);
+		}
+		else if (curr->data < value)
+		{
+			curr->right = _remove(value, curr->right);
+		}
+		else
+		{
+			if (!curr->left && !curr->right)
+			{
+				free(curr);
+				return nullptr;
+			}
+			else if (!curr->left)
+			{
+				Node* tempRight = curr->right;
+				free(curr);
+				return tempRight;
+			}
+			else if (!curr->right)
+			{
+				Node* tempLeft = curr->left;
+				free(curr);
+				return tempLeft;
+			}
+			else
+			{
+				Node* tempSwap = curr->right;
+				while (tempSwap->left)
+				{
+					tempSwap = tempSwap->left;
+				}
+
+				curr->data = tempSwap->data;
+				curr->right = _remove(tempSwap->data, curr->right);
+			}
+		}
+
+		return curr;
+	}
+
+
+public:
+
+	void inorder()
+	{
+		_inorder(root);
+	}
+
+	void preorder()
+	{
+		_preorder(root);
+	}
+
+	void insert(int value)
+	{
+		root = _insert(value, root);
+	}
+
+	void remove(int value)
+	{
+		root = _remove(value, root);
+	}
+
+	void print_odd()
+	{
+		int count = 1;
+
+		_print_odd(root, count);
+	}
+};
+
+int main()
+{
+
+	BST bako;
+
+	bako.insert(5);
+	bako.insert(1);
+	bako.insert(2);
+	bako.insert(6);
+	bako.insert(8);
+
+	bako.inorder();
+
+	int bra;
+	cin >> bra;
+	return 0;
+}
