@@ -1,0 +1,128 @@
+#include <iostream>
+using namespace std;
+
+struct Node
+{
+	int data;
+	Node* next;
+
+	Node() : next(nullptr) {}
+	
+	Node(int d) : data(d), next(nullptr) {}
+
+};
+
+class Queue
+{
+private:
+	Node* front;
+	Node* last;
+
+public:
+	
+	Queue() : front(nullptr), last(nullptr) {}
+
+	bool isEmpty()
+	{
+		return front == nullptr;
+	}
+
+	void push(int data)
+	{
+		Node* temp = new Node(data);
+		
+		if (isEmpty())
+		{
+			front = temp;
+			last = temp;
+		}
+		else if(front == last)
+		{
+			front->next = temp;
+			last = temp;
+		}
+		else
+		{
+			last->next = temp;
+			last = temp;
+		}
+	}
+
+	void print()
+	{
+		if (isEmpty())
+		{
+			cout << "Is Empty" << endl;
+			return;
+		}
+
+		Node* temp = front;
+
+		while (temp != nullptr)
+		{
+			cout << temp->data << endl;
+			temp = temp->next;
+		}
+
+		cout << endl;
+	}
+
+	void pop()
+	{
+		if (isEmpty())
+		{
+			cout << "is Empty" << endl;
+			return;
+		}
+
+		Node* temp = front;
+		Node* prev = nullptr;
+
+		while (temp->next != nullptr)
+		{
+			prev = temp;
+			temp = temp->next;
+		}
+
+		if (prev == nullptr)
+		{
+			front = nullptr;
+			last = nullptr;
+		}
+		else
+		{
+			prev->next = nullptr;
+		}
+	}
+};
+
+int main()
+{
+
+	Queue bako;
+	
+	bako.push(1);
+	bako.push(2);
+
+	bako.print();
+
+	bako.push(5);
+	bako.push(6);
+
+	bako.print();
+
+	bako.pop();
+
+	bako.print();
+
+	bako.pop();
+	bako.pop();
+	bako.pop();
+	bako.pop();
+
+	bako.print();
+
+	int bra;
+	cin >> bra;
+	return 0;
+}
