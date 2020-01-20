@@ -1,0 +1,171 @@
+#include <iostream>
+#include <list>
+#include <vector>
+#include <queue>
+using namespace std;
+
+struct Pair
+{
+	int index;
+	int distance;
+
+	bool operator<(const Pair& rhs)const
+	{
+		return distance > rhs.distance;
+	}
+};
+
+struct Edge
+{
+	int from;
+	int to;
+	int weight;
+};
+
+struct Node
+{
+	list<Pair> neighbours;
+
+	bool hasNeighbour(int index)
+	{
+		for (auto neighbour : neighbours)
+		{
+			if (neighbour.index == index)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
+	void addNeighbour(int index, int weight)
+	{
+		neighbours.push_back(Pair{index, weight});
+	}
+};
+
+class Graph
+{
+private:
+	vector<Node> nodes;
+
+public:
+
+	Graph(int size)
+	{
+		nodes.resize(size);
+	}
+
+	void print() const
+	{
+		vector<bool> visited;
+		visited.resize(nodes.size(), false);
+		for (int i = 0; i < nodes.size(); i++)
+		{
+			for (auto neighbour : nodes[i].neighbours)
+			{
+				if (!visited[neighbour.index])
+				{
+					cout << neighbour.index << " ";
+					visited[neighbour.index] = true;
+				}
+			}
+		}
+	}
+
+	void connect(int from, int to, int weight)
+	{
+		nodes[from].addNeighbour(to, weight);
+		//nodes[to].addNeighbour(from, weight);
+	}
+
+	list<Edge> dijkstra(int start)
+	{
+		if (nodes.size() < 1)
+		{
+			return list<Edge>();
+		}
+
+		vector<int> parent(nodes.size(), -1);
+		vector<int> distance(nodes.size(), INT_MAX);
+		vector<bool> visited(nodes.size(), false);
+
+		distance[start] = 0;
+
+		priority_queue<Pair> nextToProcess;
+		nextToProcess.push({ start, 0 });
+
+
+		while (!nextToProcess.empty())
+		{
+			Pair temp = nextToProcess.top();
+			nextToProcess.pop();
+			int currNode = temp.index;
+
+			if (visited[currNode])
+			{
+				continue;
+			}
+
+			visited[currNode] = true;
+
+			for (auto neighbour : nodes[currNode].neighbours)
+			{
+				int neighbourNode = neighbour.index;
+				int alternativeDistance = distance[currNode] + neighbour.distance;
+				if (alternativeDistance < distance[neighbourNode])
+				{
+					distance[neighbourNode] = alternativeDistance;
+					parent[neighbourNode] = currNode;
+					nextToProcess.push({neighbourNode, alternativeDistance});
+				}
+			}
+		}
+
+		list<Edge> tree;
+
+		for (int i = 0; i < parent.size(); i++)
+		{
+			if (parent[i] != -1)
+			{
+				int directDistznce = distance[i] - distance[parent[i]];
+				tree.push_back(Edge({parent[i], i, distance[i]}));
+			}
+		}
+
+		return tree;
+	}
+
+	
+
+};
+
+int main()
+{
+	Graph bako(5);
+
+	bako.connect(4, 1, 10);
+	bako.connect(4, 0, 2);
+	bako.connect(2, 4, 15);
+	bako.connect(3, 4, 1);
+	bako.connect(0, 1, 6);
+	bako.connect(1, 3, 7);
+
+
+	//bako.print();
+
+	list<Edge> temp = bako.dijkstra(4);
+
+	while (!temp.empty())
+	{
+		Edge currEdge = temp.front();
+		temp.pop_front();
+
+		cout << currEdge.from << " " << currEdge.to << " " << currEdge.weight << endl;
+	}
+
+	int bra;
+	cin >> bra;
+	return 0;
+}
