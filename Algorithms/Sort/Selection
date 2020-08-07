@@ -1,0 +1,46 @@
+#include <iostream>
+using namespace std;
+
+void selectionSort(int* mass, int cnt)
+{
+	for (int i = 0; i < cnt - 1; i++)
+	{
+		int min = i;
+		for (int q = i; q < cnt; q++)
+		{
+			if (mass[min] > mass[q])
+			{
+				min = q;
+			}
+		}
+
+		if (min != i)
+		{
+			int temp = mass[min];
+
+			mass[min] = mass[i];
+			mass[i] = temp;
+		}
+	}
+}
+
+int main()
+{
+	int* bako = new int[5];
+
+	for (int i = 0; i < 5; i++)
+	{
+		cin >> bako[i];
+	}
+
+	selectionSort(bako,5);
+
+	for(int i = 0; i < 5; i++)
+	{
+		cout << bako[i];
+	}
+
+	int bra;
+	cin >> bra;
+	return 0;
+}
